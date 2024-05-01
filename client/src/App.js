@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+
+
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`/api/songs?searchTerm=${searchTerm}`);
+      const response = await axios.get(`/api/music/search?q=${searchTerm}`);
       setSearchResults(response.data);
     } catch (error) {
       console.error('Error searching songs:', error);
@@ -25,7 +27,7 @@ function App() {
       <ul>
         {searchResults.map((song) => (
           <li key={song.id}>
-            {song.title} - {song.artist}
+            {song.artist_name} - {song.track_name}
           </li>
         ))}
       </ul>
