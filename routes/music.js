@@ -1,46 +1,51 @@
 const express = require('express');
-
 const router = express.Router();
-const Music = require('../models/musicschema')
-
-
-// router.get('/', (req,res) => {
-    
-//         res.json({mssg: 'Welcome'})
-      
-// } ) 
-router.get('/', async (req, res) => {
-    const { artist_name } = req.query; // Get the artist name from the query parameters
-
-    try {
-        // Check if artist_name parameter is provided
-        if (!artist_name) {
-            return res.status(400).json({ message: 'Artist name is required' });
-        }
-
-        // Find documents where artist_name matches the specified value
-        const music = await Music.find({ artist_name: artist_name });
-        
-        // Check if any matching documents were found
-        if (music.length === 0) {
-            return res.status(404).json({ message: 'Music not found' });
-        }
-
-        // Return the matching music documents
-        res.status(200).json(music);
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ message: error.message });
-    }
+const mysql = require('mysql2');
+const connection = mysql.createConnection({
+  host: '34.107.31.234',
+  user: 'root',
+  password: '12345',
+  database: 'music'
 });
 
+// Connect to the MySQL database
+connection.connect((error) => {
+  if (error) {
+    console.error('Error connecting to MySQL database:', error);
+  } else {
+    console.log('Connected to MySQL database!');
+  }
+});
 
+// Define endpoint to retrieve data from the database
+router.get('/', (req, res) => {
+  connection.query('SELECT * FROM playlist', (err, results) => {
+    if (err) {
+      console.error('Error querying the database:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json(results);
+    }
+  });
+});
 
-
-router.post('/', (req,res) => {
-    
-    res.json({mssg: 'post'})
+// Define endpoint to search data by artist name
+router.get('/search', (req, res) => {
+    const { q } = req.query; // Get the search query parameter from the request
   
-} ) 
+    // Perform a search query using the provided artist name
+    connection.query('SELECT * FROM playlist WHERE artist_name LIKE ?', [`%${q}%`], (err, results) => {
+      if (err) {
+        console.error('Error searching the database:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        res.json(results);
+      }
+    });
+  });
+
+ 
+
+
 
 module.exports = router;

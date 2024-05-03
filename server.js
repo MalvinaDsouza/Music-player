@@ -1,39 +1,40 @@
 const express = require('express');
-const mysql = require('mysql2');
+const musicRouter = require('./routes/music');
+
+const { getInsights } = require('./routes/cloud');
 
 const app = express();
 const PORT = process.env.PORT || 6000;
 
-const connection = mysql.createConnection({
-  host: '34.107.31.234',
-  user: 'root',
-  password: '12345',
-  database: 'music'
+app.use(express.json());
+
+// Mount the router at the /api/music endpoint
+app.use('/api/music', musicRouter);
+
+// Define a fallback route for any other endpoint
+app.use((req, res) => {
+  res.status(404).json({ message: 'Not Found' });
 });
 
-// Connect to the MySQL database
-connection.connect((error) => {
-  if (error) {
-    console.error('Error connecting to MySQL database:', error);
-  } else {
-    console.log('Connected to MySQL database!');
-    
-    // Query to retrieve tables
-    connection.query('SHOW TABLES', (err, rows) => {
-      if (err) {
-        console.error('Error retrieving tables:', err);
-      } else {
-        console.log('Tables in the database:');
-        rows.forEach(row => {
-          console.log(row[`Tables_in_${connection.config.database}`]);
-        });
-      }
-      
-      // Close the connection after querying tables
-      connection.end();
-    });
-  }
+
+app.get('/api/music', (req, res) => {
+  const startTime = process.hrtime(); // Get start time
+
+  pool.query('SELECT * FROM playlist', (err, results) => {
+    if (err) {
+      console.error('Error querying the database:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      const endTime = process.hrtime(); // Get end time
+      const elapsedTime = (endTime[0] - startTime[0]) * 1e9 + (endTime[1] - startTime[1]); // Calculate elapsed time in nanoseconds
+      console.log('Database query executed in', elapsedTime / 1e6, 'milliseconds');
+
+      res.json(results);
+    }
+  });
 });
+
+getInsights().catch(console.error);
 
 // Start the server
 app.listen(PORT, () => {
