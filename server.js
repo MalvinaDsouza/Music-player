@@ -1,15 +1,28 @@
 const express = require('express');
 const musicRouter = require('./routes/music');
+const cors = require('cors');
 
-const { getInsights } = require('./routes/cloud');
+
 
 const app = express();
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 3001;
+//app.use(cors());
+
+
+
+const corsOptions = {
+  origin: 'http://localhost:3000', // URL of your React frontend
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
 // Mount the router at the /api/music endpoint
 app.use('/api/music', musicRouter);
+
+
+
 
 // Define a fallback route for any other endpoint
 app.use((req, res) => {
@@ -34,7 +47,7 @@ app.get('/api/music', (req, res) => {
   });
 });
 
-getInsights().catch(console.error);
+//getInsights().catch(console.error);
 
 // Start the server
 app.listen(PORT, () => {
