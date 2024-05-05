@@ -5,7 +5,7 @@ const cors = require('cors');
 
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 4000;
 //app.use(cors());
 
 
@@ -30,24 +30,23 @@ app.use((req, res) => {
 });
 
 
-app.get('/api/music', (req, res) => {
-  const startTime = process.hrtime(); // Get start time
+// app.get('/api/music', (req, res) => {
+//   const startTime = process.hrtime(); // Get start time
 
-  pool.query('SELECT * FROM playlist', (err, results) => {
-    if (err) {
-      console.error('Error querying the database:', err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      const endTime = process.hrtime(); // Get end time
-      const elapsedTime = (endTime[0] - startTime[0]) * 1e9 + (endTime[1] - startTime[1]); // Calculate elapsed time in nanoseconds
-      console.log('Database query executed in', elapsedTime / 1e6, 'milliseconds');
+//   pool.query('SELECT * FROM playlist', (err, results) => {
+//     if (err) {
+//       console.error('Error querying the database:', err);
+//       res.status(500).json({ error: 'Internal Server Error' });
+//     } else {
+//       const endTime = process.hrtime(); // Get end time
+//       const elapsedTime = (endTime[0] - startTime[0]) * 1e9 + (endTime[1] - startTime[1]); // Calculate elapsed time in nanoseconds
+//       console.log('Database query executed in', elapsedTime / 1e6, 'milliseconds');
 
-      res.json(results);
-    }
-  });
-});
+//       res.json(results);
+//     }
+//   });
+// });
 
-//getInsights().catch(console.error);
 
 // Start the server
 app.listen(PORT, () => {
