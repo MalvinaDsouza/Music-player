@@ -8,8 +8,10 @@ function App() {
   return (
     <div className="App">
      
-    <Cloudsql />
-      <h1>WELCOME TO MUSICFIE</h1>
+      <h1>Music</h1>
+      <h3>Cloud SQL</h3>
+      <Cloudsql />
+      <h3>Cloud Firestore</h3>
       <DatabaseSelector />
     </div>
   );

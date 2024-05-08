@@ -3,6 +3,8 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import Chart from 'chart.js/auto';
 import firebaseConfig from '../firebaseConfig';
+import './databaseSelector.css'
+
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
@@ -163,10 +165,10 @@ function DatabaseSelector() {
     window.performanceChartInstance = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Load', 'Search', 'Upload', 'Create', 'Read', 'Update', 'Delete'],
+        labels: ['Load Time', 'Search Time', 'Add Time', 'Update Time', 'Delete Time'],
         datasets: [{
           label: 'Performance Time (seconds)',
-          data: [loadTime, searchTime, uploadTime, crudTimes.create, crudTimes.read, crudTimes.update, crudTimes.delete],
+          data: [loadTime, searchTime, crudTimes.read, crudTimes.update, crudTimes.delete],
           backgroundColor: [
             'rgba(255, 99, 132, 0.5)',
             'rgba(54, 162, 235, 0.5)',
@@ -202,41 +204,23 @@ function DatabaseSelector() {
     <div>
       <div>
         <h2>Performance Time:</h2>
-        <canvas id="performanceChart" width="200" height="100"></canvas>
+        <canvas id="performanceChart" width="400" height="200"></canvas>
       </div>
 
-      <div>
-        <input
-          type="radio"
-          id="firestore"
-          name="databaseOption"
-          value="firestore"
-          checked={selectedOption === 'firestore'}
-          onChange={handleOptionChange}
-        />
-        <label htmlFor="firestore">Firestore</label>
-      </div>
 
-      <button onClick={handleLoadData} disabled={loading}>
-        {loading ? 'Loading...' : 'Load Data'}
-      </button>
-
-      <div>
+      <div className="searchContainer">
         <input
           type="text"
+          id="searchInput"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Enter Track Name"
         />
         <button onClick={handleSearch}>Search</button>
       </div>
-
       
-        
-  
-
-
-
+      <br />
+     
       {searchResult && (
         <div>
         <table id="musicTable">
@@ -265,21 +249,24 @@ function DatabaseSelector() {
       </div>
   
       )}
-
-      <button onClick={handleBulkUpload} disabled={loading}>
-        {loading ? 'Uploading...' : 'Upload Bulk Data'}
+ <button onClick={handleCreate} >
+       Add
+      </button>
+      <button onClick={handleUpdate} >
+        Update
       </button>
 
-      <button onClick={handleCreate} disabled={loading}>
-        {loading ? 'Creating...' : 'Create Record'}
-      </button>
-      <button onClick={handleRead} disabled={loading}>
-        {loading ? 'Reading...' : 'Read Records'}
-      </button>
-      <button onClick={handleUpdate} disabled={loading}>
-        {loading ? 'Updating...' : 'Update Record'}
-      </button>
+      
+      <button onClick={() => handleDelete(9)} >
+             Delete
+              </button>
+     
+     
+      
 
+      <button onClick={handleLoadData}>
+        Load Data
+      </button>
       <div>
         <h2>Fetched Songs:</h2>
         <ul>
@@ -291,9 +278,7 @@ function DatabaseSelector() {
               <strong>Release Date:</strong> {song.release_date}<br />
               <strong>Genre:</strong> {song.genre}<br />
               <strong>Topic:</strong> {song.topic}
-              <button onClick={() => handleDelete(song.id)} disabled={loading}>
-                {loading ? 'Deleting...' : 'Delete'}
-              </button>
+              
             </li>
           ))}
         </ul>

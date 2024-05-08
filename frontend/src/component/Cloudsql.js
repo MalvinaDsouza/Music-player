@@ -25,7 +25,7 @@ function Cloudsql() {
 
 
   const createPerformanceChart = () => {
-    const ctx = document.getElementById('performanceChart');
+    const ctx = document.getElementById('performanceChart1');
     if (window.performanceChartInstance) {
       window.performanceChartInstance.destroy(); 
     }
@@ -139,10 +139,10 @@ function Cloudsql() {
 
   return (
     <div>
-      <h1>Melody Mix</h1>
+     
 
       <h2>Performance Time:</h2>
-      <canvas id="performanceChart" width="400" height="200"></canvas>
+      <canvas id="performanceChart1" width="400" height="200"></canvas>
 
       <div className="searchContainer">
         <input
