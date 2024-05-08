@@ -15,6 +15,7 @@
     "@google-cloud/sql": "^0.10.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "firebase": "^10.11.1",
     "mongoose": "^8.3.2",
     "mysql2": "^3.9.7",
     "promise-mysql": "^5.2.0"

@@ -39,20 +39,7 @@ router.get('/', (req, res) => {
     }
   });
 });
-// Define endpoint to search data by artist name
-// router.get('/search', (req, res) => {
-//     const { q } = req.query; // Get the search query parameter from the request
-  
-//     // Perform a search query using the provided artist name
-//     connection.query('SELECT * FROM playlist WHERE artist_name LIKE ?', [`%${q}%`], (err, results) => {
-//       if (err) {
-//         console.error('Error searching the database:', err);
-//         res.status(500).json({ error: 'Internal Server Error' });
-//       } else {
-//         res.json(results);
-//       }
-//     });
-//   });
+
 
   router.get('/search', (req, res) => {
     const { q } = req.query; // Get the search query parameter from the request
@@ -76,6 +63,26 @@ router.get('/', (req, res) => {
     });
 });
 
+
+
+router.post('/', (req, res) => {
+  // Extract data from the request body
+  const { track_name, artist_name, release_date, genre, topic } = req.body;
+
+  // Perform the database insertion operation
+  connection.query(
+    'INSERT INTO playlist (track_name, artist_name, genre, topic) VALUES (?, ?, ?, ?)',
+    [track_name, artist_name,  genre, topic],
+    (err, result) => {
+      if (err) {
+        console.error('Error adding record:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        res.status(201).json({ message: 'Record added successfully', insertedId: result.insertId });
+      }
+    }
+  );
+});
  
 router.get('/:id', (req, res) => {
   const { id } = req.params;
@@ -88,11 +95,10 @@ router.get('/:id', (req, res) => {
     }
   });
 });
-
 router.put('/:id', (req, res) => {
-  const { id } = req.params;
-  const newData = req.body; // Assuming you send the updated data in the request body
-  connection.query('UPDATE playlist SET ? WHERE id = ?', [newData, id], (err, result) => {
+  const id = parseInt(req.params.id); // Parse the id parameter to ensure it's a numeric value
+  const updatedData = req.body; // Assuming you send the updated data in the request body
+  connection.query('UPDATE playlist SET ? WHERE id = ?', [updatedData, id], (err, result) => {
     if (err) {
       console.error('Error updating record:', err);
       res.status(500).json({ error: 'Internal Server Error' });
@@ -116,5 +122,8 @@ router.delete('/:id', (req, res) => {
 });
 
 
+
+
+// Route handler for updating
 
 module.exports = router;
