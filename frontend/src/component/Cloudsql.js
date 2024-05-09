@@ -73,7 +73,7 @@ function Cloudsql() {
       const endTime = performance.now(); // End performance measurement
       
        // Set execution time state
-      setExecutionTime((endTime - startTime)/1000);
+      setExecutionTime((endTime - startTime));
      
     } catch (error) {
       console.error('Error fetching music data:', error);
@@ -86,7 +86,7 @@ function Cloudsql() {
       const response = await axios.get(`http://localhost:4000/api/music/search?q=${searchTerm}`);
       const endTime = performance.now(); 
       
-      setSearchTime((endTime - startTime) / 1000);
+      setSearchTime((endTime - startTime));
       setSearchResults(response.data);
 
 
@@ -130,7 +130,7 @@ function Cloudsql() {
       const startTime = performance.now();
       await axios.delete(`http://localhost:4000/api/music/${id}`);
       const endTime = performance.now();
-      setDeleteTime((endTime - startTime) / 1000);
+      setDeleteTime((endTime - startTime));
       setSearchResults(searchResults.filter(song => song.id !== id));
     } catch (error) {
       console.error('Error deleting song:', error);
@@ -141,7 +141,7 @@ function Cloudsql() {
     <div>
      
 
-      <h2>Performance Time:</h2>
+      <h4>Performance Time:</h4>
       <canvas id="performanceChart1" width="400" height="200"></canvas>
 
       <div className="searchContainer">
@@ -162,7 +162,6 @@ function Cloudsql() {
       <button onClick={() => handleAdd({
   artist_name: '12345',
   track_name: 'Love',
-  
   genre: 'POP',
   topic: 'Romantic'
 })}>ADD</button>
@@ -171,9 +170,11 @@ function Cloudsql() {
       <button onClick={() => handleDelete(8)}>Delete</button> 
       <button onClick={handleRead}> Load data</button>
       <br /> <br /> 
-     
-
-     
+      <p style={{ color: 'Purple', fontWeight: 'bold' }}>Search Time in Cloud SQL: {searchTime?.toFixed(2)} ms</p>
+<p style={{ color: 'Blue', fontWeight: 'bold' }}>Add Time in Cloud SQL: {addTime?.toFixed(2)} ms</p>
+<p style={{ color: 'Brown', fontWeight: 'bold' }}>Update Time in Cloud SQL: {updateTime?.toFixed(2)} ms</p>
+<p style={{ color: 'Green', fontWeight: 'bold' }}>Delete Time in Cloud SQL: {deleteTime?.toFixed(2)} ms</p>
+<p style={{ color: 'Red', fontWeight: 'bold' }}>Load Time in Cloud SQL: {executionTime?.toFixed(2)} ms</p>
     </div>
   );
 }

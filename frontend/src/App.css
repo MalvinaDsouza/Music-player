@@ -1,41 +1,9 @@
-body {
-  font-family: "Arial", "Helvetica Neue", Helvetica, sans-serif;
-  display: grid;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 60vh;
-  margin: 0;
+.database-container {
+  display: flex;
+  justify-content: space-between; /* Adjust as needed */
 }
 
-h1 {
-  text-align: center;
-}
-
-#searchContainer {
-  margin-bottom: 20px;
-}
-
-#searchInput {
-  padding: 5px;
-}
-
-#buttonContainer {
-  text-align: center;
-  margin-top: 20px;
-}
-
-button {
-  padding: 5px 10px;
-  margin: 0 5px;
-}
-
-#musicTable {
-  width: 80%; /* Adjust width as needed */
-}
-
-/* Center the table horizontally */
-#musicTable {
-  margin-left: auto;
-  margin-right: auto;
+.cloudsql-container,
+.database-selector-container {
+  width: 48%; /* Adjust as needed */ /* Adjust margin as needed */
 }

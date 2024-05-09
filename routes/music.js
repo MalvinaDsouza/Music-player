@@ -5,10 +5,11 @@ const mysql = require('mysql2');
 const { performance } = require('perf_hooks');
 
 const connection = mysql.createConnection({
-  host: '34.107.31.234',
+  //host: '34.107.31.234',
+  host: '127.0.0.1',
   user: 'root',
-  password: '12345',
-  database: 'music'
+  password: 'Kim@30tae',
+  database: 'playlist'
 });
 
 // Connect to the MySQL database

@@ -45,7 +45,7 @@ function DatabaseSelector() {
     } finally {
       setLoading(false);
       const endTime = performance.now();
-      setLoadTime((endTime - startTime) / 1000); // Convert to seconds
+      setLoadTime((endTime - startTime) ); // Convert to seconds
     }
   };
 
@@ -54,7 +54,7 @@ function DatabaseSelector() {
     const result = songs.find(song => song.track_name.toLowerCase() === searchTerm.toLowerCase());
     setSearchResult(result);
     const endTime = performance.now();
-    setSearchTime((endTime - startTime) / 1000); // Convert to seconds
+    setSearchTime((endTime - startTime) ); // Convert to seconds
   };
 
   const handleBulkUpload = async () => {
@@ -101,13 +101,13 @@ function DatabaseSelector() {
     const startTime = performance.now();
     try {
       // Perform create operation
-      await db.collection('simple').add({ name: 'New Record' });
+      await db.collection('simple').add({ name: 'old' });
     } catch (error) {
       console.error('Error creating data:', error);
     } finally {
       setLoading(false);
       const endTime = performance.now();
-      setCrudTimes(prevTimes => ({ ...prevTimes, create: (endTime - startTime) / 1000 }));
+      setCrudTimes(prevTimes => ({ ...prevTimes, create: (endTime - startTime)  }));
     }
   };
 
@@ -153,7 +153,7 @@ function DatabaseSelector() {
     } finally {
       setLoading(false);
       const endTime = performance.now();
-      setCrudTimes(prevTimes => ({ ...prevTimes, delete: (endTime - startTime) / 1000 }));
+      setCrudTimes(prevTimes => ({ ...prevTimes, delete: (endTime - startTime)  }));
     }
   };
 
@@ -203,7 +203,7 @@ function DatabaseSelector() {
   return (
     <div>
       <div>
-        <h2>Performance Time:</h2>
+        <h4>Performance Time:</h4>
         <canvas id="performanceChart" width="400" height="200"></canvas>
       </div>
 
@@ -260,31 +260,19 @@ function DatabaseSelector() {
       <button onClick={() => handleDelete(9)} >
              Delete
               </button>
-     
-     
+
       
 
       <button onClick={handleLoadData}>
         Load Data
       </button>
-      <div>
-        <h2>Fetched Songs:</h2>
-        <ul>
-          {songs.map((song, index) => (
-            <li key={index}>
-              <strong>ID:</strong> {song.id}<br />
-              <strong>Artist:</strong> {song.artist_name}<br />
-              <strong>Track Name:</strong> {song.track_name}<br />
-              <strong>Release Date:</strong> {song.release_date}<br />
-              <strong>Genre:</strong> {song.genre}<br />
-              <strong>Topic:</strong> {song.topic}
-              
-            </li>
-          ))}
-        </ul>
-      </div>
+      <p style={{ color: 'Purple', fontWeight: 'bold' }}>Search Time in Cloud Firestore: {searchTime !== null ? searchTime.toFixed(2) : ''} ms</p>
+<p style={{ color: 'Blue', fontWeight: 'bold' }}>Add Time in Cloud Firestore: {crudTimes.read !== null ? crudTimes.read.toFixed(2) : ''} ms</p>
+<p style={{ color: 'Brown', fontWeight: 'bold' }}>Update Time in Cloud Firestore: {crudTimes.update !== null ? crudTimes.update.toFixed(2) : ''} ms</p>
+<p style={{ color: 'Green', fontWeight: 'bold' }}>Delete Time in Cloud Firestore: {crudTimes.delete !== null ? crudTimes.delete.toFixed(2) : ''} ms</p>
+<p style={{ color: 'Red', fontWeight: 'bold' }}>Load Time in Cloud Firestore: {loadTime !== null ? loadTime.toFixed(2) : ''} ms</p>
     </div>
-  );
+  ); 
 }
 
 export default DatabaseSelector;
