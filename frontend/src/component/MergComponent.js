@@ -145,7 +145,7 @@ function MergComponent() { // Renamed to start with an uppercase letter
             console.error('Error updating song:', error);
         } finally {
             const end = performance.now();
-            setCrudTimes(prevTimes => ({ ...prevTimes, update: (end - start) / 1000 }));
+            setCrudTimes(prevTimes => ({ ...prevTimes, update: (end - start) }));
         }
     };
 
